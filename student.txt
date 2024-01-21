@@ -1,0 +1,5 @@
+id fname lname snumber gpa
+0 jon snow 101220698 12
+1 robb stark 202335774 11.3
+2 sansa stark 404662547 10.4
+3 catlin tully 101550478 9.5
