@@ -157,4 +157,5 @@ def chooseSet():
     elif choice=="3":
         chosenTables=selectTwoTables()
         return operations.subtraction(chosenTables[0],chosenTables[1])
+
 main()
