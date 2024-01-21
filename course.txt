@@ -2,3 +2,4 @@ id title average
 0 math 70
 1 science 80
 2 computers 90
+3 english 50

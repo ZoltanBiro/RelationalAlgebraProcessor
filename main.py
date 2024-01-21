@@ -1,4 +1,5 @@
 import fileReader
+import operations
 tableNumber=0
 tableFileNames=fileReader.getTextFiles()
 tables=[]
@@ -54,11 +55,20 @@ Please input a number or a -1 to exit: """)
             case "-1":
                 print("Goodbye")
             case "1":
-                selection()
+                print("\nPlease select a table to perform this operation on:")
+                selectedTable=selectTable()
+                condition=selectCondition().split()
+                result=operations.selection(selectedTable,condition)
+                displayResults(result)
             case "2":
-                projection()
+                print("\nPlease select a table to perform this operation on:")
+                selectedTable=selectTable()   
+                columnTitles=input("Please enter the names of the columns you'd like to select, separated by spaces: ").split()
+                result=operations.projection(selectedTable,columnTitles)
+                displayResults(result)
             case "3":
-                chooseJoin()
+                result=chooseJoin()
+                displayResults(result)
             case "4":
                 print("case 4")
             case "5":
@@ -74,64 +84,27 @@ def selectTable():
     choice=int(input("Please enter the number of the table you'd like to select: "))
     return tables[choice]
 
+def selectTwoTables():
+        print("\nPlease the left table to perform this operation on:")
+        table1=selectTable()
+        print("\nPlease the right table to perform this operation on:")
+        table2=selectTable()
+        return [table1,table2]
+
+def selectTwoColumns():
+    leftColumn=input("Please input a column from the left relation to compare through the opperator: ")
+    rightColumn=input("Please input a column from the right relation to compare through the opperator: ")
+    return [leftColumn,rightColumn]
+
 def selectCondition():
     print("Type in the condition to apply to the selection. The string should be 3 values separated by spaces; a column name, an opporator (=, !=, <, >), and a value. \nEx: fname != zoltan")
     return(input("What is your condition: "))
 
-
-def selection():
-    result=[]
-    print("\nPlease select a table to perform this operation on:")
-    table1=selectTable()
-    condition=selectCondition().split()
-    #find index of that column name
-    columnIndex=table1[0].index(condition[0])
-    result.append(table1[0])
-    if condition[1]=="=":
-        for i in range(1,len(table1)): # for each item
-            if table1[i][columnIndex]==condition[2]:
-                result.append(table1[i])
-    elif condition[1]=="!=":
-        for i in range(1,len(table1)): # for each item
-            if table1[i][columnIndex]!=condition[2]:
-                result.append(table1[i])
-    elif condition[1]=="<":
-        for i in range(1,len(table1)): # for each item
-            if table1[i][columnIndex]<int(condition[2]):
-                result.append(table1[i])
-    elif condition[1]==">":
-        for i in range(1,len(table1)): # for each item
-            if table1[i][columnIndex]>int(condition[2]):
-                result.append(table1[i])
-    
+def displayResults(result):
     print("\nThis is the resulting table: ")
     fileReader.print2dArray(result)
     choice=input("Would you like to save this relation (y/n)? ")
     if choice=="y":
-        tableNames.append(input("Please name this new relation: "))
-        tables.append(result)
-        
-def projection():
-    result=[]
-    print("\nPlease select a table to perform this operation on:")
-    table1=selectTable()
-    columnTitles=input("Please enter the names of the columns you'd like to select, separated by spaces: ").split()
-    columnIndexes=[]
-    for c in columnTitles:
-        columnIndexes.append(table1[0].index(c))
-
-    result.append(columnTitles)
-    for i in range(1,len(table1)):
-        temprow=[]
-        for c in columnIndexes:
-            temprow.append(table1[i][c])
-        result.append(temprow)
-
-    print("\nThis is the resulting table: ")
-    fileReader.print2dArray(result)
-    choice=input("Would you like to save this relation (y/n)? ")
-    if choice=="y":
-        print("I AM ADDING!!!!!!!!!!!!!!!!!!!!!!!!")
         tableNames.append(input("Please name this new relation: "))
         tables.append(result)
 
@@ -143,56 +116,28 @@ def printaTable():
 def chooseJoin():
     print("""Which type of join would you like to do?
 1 Cartesian Product
-2 Inner Join""")
+2 Inner Join
+3 Left Outer Join
+4 Right Outer Join
+5 Full Outer Join""")
     choice=input("Which join would you like to perform? ")
     if choice=="1":
-        cartesianProduct()
+        chosenTables=selectTwoTables()
+        return operations.cartesianProduct(chosenTables[0],chosenTables[1])
     elif choice=="2":
-        innerJoin()
-    
-def cartesianProduct():
-    print("\nPlease the left table to perform this operation on:")
-    table1=selectTable()
-    print("\nPlease the right table to perform this operation on:")
-    table2=selectTable()
-
-    result=[]
-    result.append(table1[0]+table2[0])
-    for i in range(1,len(table1)):
-        for j in range(1,len(table2)):
-            result.append(table1[i]+table2[j])
-    
-    print("\nThis is the resulting table: ")
-    fileReader.print2dArray(result)
-    choice=input("Would you like to save this relation (y/n)? ")
-    if choice=="y":
-        tableNames.append(input("Please name this new relation: "))
-        tables.append(result)
-
-def innerJoin():
-    print("\nPlease the left table to perform this operation on:")
-    table1=selectTable()
-    print("\nPlease the right table to perform this operation on:")
-    table2=selectTable()
-
-    result=[]
-
-    leftColumn=input("Please input a column from the left relation to compare through the opperator: ")
-    rightColumn=input("Please input a column from the right relation to compare through the opperator: ")
-    leftColumnIndex=table1[0].index(leftColumn)
-    rightColumnIndex=table2[0].index(rightColumn) 
-
-    result.append(table1[0]+table2[0])
-    for i in range(1,len(table1)):
-        for j in range(1,len(table2)):
-            if table1[i][leftColumnIndex]==table2[j][rightColumnIndex]:
-                result.append(table1[i]+table2[j])
-    
-    print("\nThis is the resulting table: ")
-    fileReader.print2dArray(result)
-    choice=input("Would you like to save this relation (y/n)? ")
-    if choice=="y":
-        tableNames.append(input("Please name this new relation: "))
-        tables.append(result)
-
+        chosenTables=selectTwoTables()
+        chosenColumns=selectTwoColumns()
+        return operations.innerJoin(chosenTables[0],chosenTables[1],chosenColumns[0],chosenColumns[1])
+    elif choice=="3":
+        chosenTables=selectTwoTables()
+        chosenColumns=selectTwoColumns()
+        return operations.leftOuterJoin(chosenTables[0],chosenTables[1],chosenColumns[0],chosenColumns[1])    
+    elif choice=="4":
+        chosenTables=selectTwoTables()
+        chosenColumns=selectTwoColumns()
+        return operations.rightOuterJoin(chosenTables[0],chosenTables[1],chosenColumns[0],chosenColumns[1])    
+    elif choice=="5":
+        chosenTables=selectTwoTables()
+        chosenColumns=selectTwoColumns()
+        return operations.fullOuterJoin(chosenTables[0],chosenTables[1],chosenColumns[0],chosenColumns[1])  
 main()
