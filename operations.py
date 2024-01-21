@@ -163,6 +163,56 @@ def fullOuterJoin(ltable,rtable,lcolumn,rcolumn):
  
     return result
 
+def intersection(ltable,rtable):
+    result=[]
+    if(len(rtable[0])!=len(ltable[0])):
+        print("Error, the number of columns must be the same")
+        return result
+    for i in range(len(ltable[0])):
+        if ltable[0][i]!=rtable[0][i]:
+            print("Error: column titles and datatypes must be the same")
+            return[]
+    result.append(ltable[0])
+
+    for i in range(1,len(ltable)):
+        if(ltable[i]in rtable):
+            result.append(ltable[i])
+    return result
+
+def union(ltable,rtable):
+    result=[]
+    if(len(rtable[0])!=len(ltable[0])):
+        print("Error, the number of columns must be the same")
+        return result
+    for i in range(len(ltable[0])):
+        if ltable[0][i]!=rtable[0][i]:
+            print("Error: column titles and datatypes must be the same")
+            return[]
+    result=result+ltable
+
+    for i in range(1,len(ltable)):
+        if(ltable[i] not in rtable):
+            result.append(ltable[i])
+    return result
+
+def subtraction(ltable,rtable):
+    result=[]
+    if(len(rtable[0])!=len(ltable[0])):
+        print("Error, the number of columns must be the same")
+        return result
+    for i in range(len(ltable[0])):
+        if ltable[0][i]!=rtable[0][i]:
+            print("Error: column titles and datatypes must be the same")
+            return[]
+    result.append(ltable[0])
+
+    for i in range(1,len(ltable)):
+        if(ltable[i] not in rtable):
+            result.append(ltable[i])
+    for i in range(1,len(rtable)):
+        if (rtable[i] not in ltable):
+            result.append(rtable[i])
+    return result
 
 
 

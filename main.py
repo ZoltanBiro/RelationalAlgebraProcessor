@@ -70,7 +70,8 @@ Please input a number or a -1 to exit: """)
                 result=chooseJoin()
                 displayResults(result)
             case "4":
-                print("case 4")
+                result=chooseSet()
+                displayResults(result)
             case "5":
                 printaTable()
             case _:
@@ -140,4 +141,20 @@ def chooseJoin():
         chosenTables=selectTwoTables()
         chosenColumns=selectTwoColumns()
         return operations.fullOuterJoin(chosenTables[0],chosenTables[1],chosenColumns[0],chosenColumns[1])  
+
+def chooseSet():
+    print("""Which type of union operation would you like to do?
+1 Intersection
+2 Union
+3 Subtraction""")
+    choice=input("Which operator would you like to perform? ")
+    if choice=="1":
+        chosenTables=selectTwoTables()
+        return operations.intersection(chosenTables[0],chosenTables[1])
+    elif choice=="2":
+        chosenTables=selectTwoTables()
+        return operations.union(chosenTables[0],chosenTables[1])
+    elif choice=="3":
+        chosenTables=selectTwoTables()
+        return operations.subtraction(chosenTables[0],chosenTables[1])
 main()

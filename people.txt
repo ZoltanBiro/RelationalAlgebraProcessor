@@ -1,0 +1,5 @@
+id fname lname snumber gpa
+0 jon snow 101220698 12
+3 catlin tully 101550478 9.5
+4 rickon stark 707995804 6.9
+5 brandon stark 808445612 7.7
