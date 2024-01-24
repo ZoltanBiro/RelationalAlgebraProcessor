@@ -33,12 +33,10 @@ are stored in .txt files using spaces and newlines.""")
             tableNames.append(tableFileNames[selection])
 
 def autoloadTables():
-    tables.append(fileReader.readFile(tableFileNames[0]))
-    tables.append(fileReader.readFile(tableFileNames[1]))
-    tables.append(fileReader.readFile(tableFileNames[2]))
-    tableNames.append(tableFileNames[0])
-    tableNames.append(tableFileNames[1])
-    tableNames.append(tableFileNames[2])
+    for fileName in tableFileNames:
+        tables.append(fileReader.readFile(fileName))
+        tableNames.append(fileName)
+
 
 def main():
     select=0
@@ -49,7 +47,8 @@ def main():
     2 Projection
     3 Join
     4 Set
-    5 Print a loaded table
+    5 Division
+    6 Print a loaded table
 Please input a number or a -1 to exit: """)
         match select:
             case "-1":
@@ -73,6 +72,10 @@ Please input a number or a -1 to exit: """)
                 result=chooseSet()
                 displayResults(result)
             case "5":
+                chosenTables=selectTwoTables()
+                result=operations.division(chosenTables[0],chosenTables[1])
+                displayResults(result)
+            case "6":
                 printaTable()
             case _:
                 print("Please print a valid input.")

@@ -214,5 +214,21 @@ def subtraction(ltable,rtable):
             result.append(rtable[i])
     return result
 
-
+def division(ltable,rtable):
+    #every column in rtable must be present in ltable
+    columnIndexs=[]
+    for i in rtable[0]:
+        if i not in ltable[0]:
+            print("Error: all columns in the right table must be present in the left table.")
+        else:
+            columnIndexs.append(ltable[0].index(i))
+    result=[]
+    for i in ltable:
+        workingRow=[]
+        for j in range(len(i)):
+            if j not in columnIndexs:
+                workingRow.append(i[j])
+        if workingRow not in result:
+            result.append(workingRow)
+    return result
 
