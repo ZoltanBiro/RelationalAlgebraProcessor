@@ -23,14 +23,17 @@ def selection(table,cond):
                 result.append(table1[i])
     
     return result
-
-        
+       
 def projection(table,columns):
     result=[]
     table1=table
     columnTitles=columns
     columnIndexes=[]
+    
     for c in columnTitles:
+        if c not in table[0]:
+            print("ERROR: column:",c,"is not in this relation")
+            return result
         columnIndexes.append(table1[0].index(c))
 
     result.append(columnTitles)
@@ -166,11 +169,11 @@ def fullOuterJoin(ltable,rtable,lcolumn,rcolumn):
 def intersection(ltable,rtable):
     result=[]
     if(len(rtable[0])!=len(ltable[0])):
-        print("Error, the number of columns must be the same")
+        print("ERROR, the number of columns must be the same")
         return result
     for i in range(len(ltable[0])):
         if ltable[0][i]!=rtable[0][i]:
-            print("Error: column titles and datatypes must be the same")
+            print("ERROR: column titles and datatypes must be the same")
             return[]
     result.append(ltable[0])
 
@@ -182,36 +185,34 @@ def intersection(ltable,rtable):
 def union(ltable,rtable):
     result=[]
     if(len(rtable[0])!=len(ltable[0])):
-        print("Error, the number of columns must be the same")
+        print("ERROR, the number of columns must be the same")
         return result
     for i in range(len(ltable[0])):
         if ltable[0][i]!=rtable[0][i]:
-            print("Error: column titles and datatypes must be the same")
-            return[]
+            print("ERROR: column titles and datatypes must be the same")
+            return result
+    
     result=result+ltable
-
-    for i in range(1,len(ltable)):
-        if(ltable[i] not in rtable):
-            result.append(ltable[i])
+    for i in range(1,len(rtable)):
+        if(rtable[i] not in result):
+            result.append(rtable[i])
     return result
 
 def subtraction(ltable,rtable):
     result=[]
     if(len(rtable[0])!=len(ltable[0])):
-        print("Error, the number of columns must be the same")
+        print("ERROR, the number of columns must be the same")
         return result
     for i in range(len(ltable[0])):
         if ltable[0][i]!=rtable[0][i]:
-            print("Error: column titles and datatypes must be the same")
+            print("ERROR: column titles and datatypes must be the same")
             return[]
     result.append(ltable[0])
 
     for i in range(1,len(ltable)):
         if(ltable[i] not in rtable):
             result.append(ltable[i])
-    for i in range(1,len(rtable)):
-        if (rtable[i] not in ltable):
-            result.append(rtable[i])
+
     return result
 
 def division(ltable,rtable):
@@ -219,7 +220,7 @@ def division(ltable,rtable):
     columnIndexs=[]
     for i in rtable[0]:
         if i not in ltable[0]:
-            print("Error: all columns in the right table must be present in the left table.")
+            print("ERROR: all columns in the right table must be present in the left table.")
         else:
             columnIndexs.append(ltable[0].index(i))
     result=[]
